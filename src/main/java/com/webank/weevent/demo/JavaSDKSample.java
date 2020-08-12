@@ -71,6 +71,7 @@ public class JavaSDKSample {
         }
 
         if (command.equals("subscribe")) {
+            // subscribe will be auto unSubscribed after 1 hour (just for test)
             Thread.sleep(60 * 60 * 1000L);
             subscribeIdList.forEach(subscribeId -> {
                 try {
