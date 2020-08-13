@@ -24,6 +24,9 @@ public class JavaSDKSample {
     public static void main(String[] args) throws InterruptedException {
         log.info("args = {}", Arrays.toString(args));
 
+        if (args == null || args.length == 0) {
+            args = new String[]{"open", "1", "com.weevent.test"};
+        }
         String command = args[0];
         String groupId = args[1];
         String topicName;
