@@ -2,7 +2,7 @@
 current_path=$(pwd)
 
 # check param
-if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup"]];then
+if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup" ]];then
     echo "Usage:"
     echo "    ./command.sh listGroup"
     echo "    ./command.sh open groupId topicName"
