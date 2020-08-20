@@ -41,6 +41,7 @@ public class JavaSDKSample {
             weEventClient = IWeEventClient.builder().brokerUrl(brokerUrl).groupId(groupId).build();
         } catch (BrokerException e) {
             log.error("build WeEventClient failed, brokerUrl:[{}], exception:{}", brokerUrl, e);
+            System.out.println("build WeEventClient failed, brokerUrl:[" + brokerUrl + "], exception:" + e);
             System.exit(1);
         }
 
@@ -71,6 +72,7 @@ public class JavaSDKSample {
             }
         } catch (BrokerException e) {
             log.error("execute {} failed, exception:{}", command, e);
+            System.out.println("execute " + command + " failed, exception:" + e);
             System.exit(1);
         }
 
@@ -92,6 +94,7 @@ public class JavaSDKSample {
         boolean result = weEventClient.open(topicName);
         if (!result) {
             log.error("open topic:[{}] failed.", topicName);
+            System.out.println("open topic:[" + topicName + "] failed.");
         } else {
             log.info("open topic:{} success.", topicName);
             System.out.println("open topic:[" + topicName + "] success.");
@@ -124,6 +127,7 @@ public class JavaSDKSample {
         SendResult sendResult = weEventClient.publish(event);
         if (!sendResult.getStatus().equals(SendResult.SendResultStatus.SUCCESS)) {
             log.error("publish event by topic:[{}] failed, sendResult:{}.", topicName, sendResult);
+            System.out.println("publish event by topic:[" + topicName + "] failed, sendResult:" + sendResult);
         } else {
             log.info("publish event to:{} success, sendResult:{}.", topicName, sendResult);
             System.out.println("publish event by topic:[" + topicName + "] success, sendResult:" + sendResult);
@@ -134,6 +138,7 @@ public class JavaSDKSample {
         boolean unSubscribe = weEventClient.unSubscribe(subscriptionId);
         if (!unSubscribe) {
             log.error("unSubscribe subscriptionId:{} failed.", subscriptionId);
+            System.out.println("unSubscribe failed, subscriptionId:" + subscriptionId);
         } else {
             log.info("unSubscribe subscriptionId:{} success.", subscriptionId);
             System.out.println("unSubscribe subscriptionId:" + subscriptionId + " success.");
@@ -144,6 +149,7 @@ public class JavaSDKSample {
     private static void status(String topicName) throws BrokerException {
         if (!weEventClient.exist(topicName)) {
             log.error("get topic info failed due to topic not exist. topic:{}", topicName);
+            System.out.println("get topic info failed due to topic not exist. topic:{" + topicName + "}");
             System.exit(1);
         }
         TopicInfo topicInfo = weEventClient.state(topicName);
