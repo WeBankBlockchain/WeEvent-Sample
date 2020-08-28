@@ -2,7 +2,7 @@
 
 echo "begin to build WeEvent-Sample."
 
-./gradlew clean build
+gradle clean build
 if [[ $? -ne 0 ]];then
 	echo "gradle build WeEvent-Sample failed"
 	exit 1
