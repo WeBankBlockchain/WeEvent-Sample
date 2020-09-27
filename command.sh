@@ -66,18 +66,18 @@ if [[ $1 == "getEvent" ]] && [[ $# -ne 3 ]];then
     exit 1
 fi
 
-# windos
-if [[ "$(expr substr $(uname -s) 1 10)"=="MINGW32_NT" ]];then
-    if [[ $1 == "publish" ]];then
-        ${JAVA_HOME}/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
-    else
-        ${JAVA_HOME}/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3
-    fi
-else
+# Mac OS X || GNU/Linux
+if [[ "$(uname)" == "Darwin" ]] || [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]];then
     if [[ $1 == "publish" ]];then
         ${JAVA_HOME}/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
         ${JAVA_HOME}/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3
     fi
+# Windows
+elif [[ "$(expr substr $(uname -s) 1 6)"=="MINGW" ]];then
+    if [[ $1 == "publish" ]];then
+        ${JAVA_HOME}/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
+    else
+        ${JAVA_HOME}/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3
+    fi
 fi
-
