@@ -74,7 +74,7 @@ if [[ "$(uname)" == "Darwin" ]] || [[ "$(expr substr $(uname -s) 1 5)" == "Linux
         ${JAVA_HOME}/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3
     fi
 # Windows
-elif [[ "$(expr substr $(uname -s) 1 6)"=="MINGW" ]];then
+elif [[ "$(expr substr $(uname -s) 1 6)" == "MINGW" ]];then
     if [[ $1 == "publish" ]];then
         ${JAVA_HOME}/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
