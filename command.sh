@@ -68,7 +68,7 @@ if [[ $1 == "getEvent" ]] && [[ $# -ne 3 ]];then
     exit 1
 fi
 
-if [[ $1 == "sendFile" ]] && [[ $# -ne 3 ]];then
+if [[ $1 == "sendFile" ]] && [[ $# -ne 4 ]];then
     echo "Usage:"
     echo "    ./command.sh sendFile groupId topicName fileUrl"
     exit 1
