@@ -83,10 +83,14 @@ public class JavaSDKSample {
                     eventId = args[2];
                     getEvent(eventId);
                     break;
-                case "fileUpload":
+                case "sendFile":
                 	topicName = args[2];
                 	fileUrl = args[3];
-                	fileUpload(topicName, fileUrl);
+                	sendFile(topicName, fileUrl);
+                    break;
+                case "receiveFile":
+                	topicName = args[2];
+                	receiveFile(topicName);
                     break;
             }
         } catch (BrokerException e) {
@@ -182,14 +186,20 @@ public class JavaSDKSample {
         System.out.println("getEvent success, event:" + event);
     }
     
-    private static void fileUpload(String topicName, String fileUrl) throws BrokerException {
+    private static void sendFile(String topicName, String fileUrl) throws BrokerException {
     	try {
         	weEventFileClient.openTransport4Sender(topicName);
         	FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(fileUrl).getAbsolutePath(), true);
-        	log.info("fileUpload success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
-            System.out.println("fileUpload success, fileChunksMeta:" + JsonHelper.object2Json(fileChunksMeta));
+        	log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
+            System.out.println("sendFile success, fileChunksMeta:" + JsonHelper.object2Json(fileChunksMeta));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    }
+    
+    private static void receiveFile(String topicName) throws BrokerException {
+    	List<FileChunksMeta> fileChunksMetas = weEventFileClient.listFiles(topicName);
+    	log.info("receiveFile success, fileChunksMetas:{}", JsonHelper.object2Json(fileChunksMetas));
+        System.out.println("receiveFile success, fileChunksMetas:" + JsonHelper.object2Json(fileChunksMetas));
     }
 }

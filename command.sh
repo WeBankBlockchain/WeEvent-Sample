@@ -2,7 +2,7 @@
 current_path=$(pwd)
 
 # check param
-if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup" ]] && [[ $1 != "fileUpload" ]];then
+if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup" ]] && [[ $1 != "sendFile" ]] && [[ $1 != "receiveFile" ]];then
     echo "Usage:"
     echo "    ./command.sh listGroup"
     echo "    ./command.sh open groupId topicName"
@@ -10,7 +10,8 @@ if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ 
     echo "    ./command.sh publish groupId topicName content"
     echo "    ./command.sh getEvent groupId eventId(成功publish一个事件后，会返回该事件的eventId)"
     echo "    ./command.sh status groupId topicName"
-    echo "    ./command.sh fileUpload groupId topicName fileUrl"
+    echo "    ./command.sh sendFile groupId topicName fileUrl"
+    echo "    ./command.sh receiveFile groupId topicName"
     echo "    ./command.sh general groupId"
     exit 1
 fi
@@ -67,9 +68,15 @@ if [[ $1 == "getEvent" ]] && [[ $# -ne 3 ]];then
     exit 1
 fi
 
-if [[ $1 == "fileUpload" ]] && [[ $# -ne 3 ]];then
+if [[ $1 == "sendFile" ]] && [[ $# -ne 3 ]];then
     echo "Usage:"
-    echo "    ./command.sh fileUpload groupId topicName fileUrl"
+    echo "    ./command.sh sendFile groupId topicName fileUrl"
+    exit 1
+fi
+
+if [[ $1 == "receiveFile" ]] && [[ $# -ne 3 ]];then
+    echo "Usage:"
+    echo "    ./command.sh receiveFile groupId topicName"
     exit 1
 fi
 
