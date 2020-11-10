@@ -54,7 +54,6 @@ public class JavaSDKSample {
             fiscoConfig.load("");
             
             weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
-            log.info("weEventFileClient = " + weEventFileClient);
         } catch (BrokerException e) {
             log.error("build WeEventClient failed, brokerUrl:[{}], exception:{}", brokerUrl, e);
             System.out.println("build WeEventClient failed, brokerUrl:[" + brokerUrl + "], exception:" + e);
@@ -191,10 +190,12 @@ public class JavaSDKSample {
     
     private static void sendFile(String topicName, String fileUrl) throws BrokerException {
     	try {
+    		log.info("new File(fileUrl).getAbsolutePath()"+new File(fileUrl).getAbsolutePath());
         	FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(fileUrl).getAbsolutePath(), true);
         	log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
             System.out.println("sendFile success, fileChunksMeta:" + JsonHelper.object2Json(fileChunksMeta));
 		} catch (Exception e) {
+			log.error("e"+e.getMessage(), e);
 			e.printStackTrace();
 		}
     }
