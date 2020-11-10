@@ -33,16 +33,6 @@ public class JavaSDKSample {
     // chunk size 1MB
     private static int fileChunkSize = 1048576;
     
-    private static FiscoConfig fiscoConfig;
-    
-    @Bean
-    public void bean() {
-    	JavaSDKSample.fiscoConfig = new FiscoConfig();
-    	JavaSDKSample.fiscoConfig.load("");
-    }
-    
-    
-    
     public static void main(String[] args) throws InterruptedException {
         log.info("args = {}", Arrays.toString(args));
 
@@ -63,9 +53,18 @@ public class JavaSDKSample {
             // build Client by default groupId and configured brokerUrl
             weEventClient = IWeEventClient.builder().brokerUrl(brokerUrl).groupId(groupId).build();
             
-            log.info("groupId = " + groupId);
+            FiscoConfig fiscoConfig = new FiscoConfig();
+            fiscoConfig.load("classpath:fisco.properties");
+            
+            
             log.info("fiscoConfig = " + fiscoConfig);
+            
+            FiscoConfig fiscoConfig2 = new FiscoConfig();
+            fiscoConfig2.load("");
+            log.info("fiscoConfig2 = " + fiscoConfig2);
+            
             weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
+            log.info("weEventFileClient = " + weEventFileClient);
         } catch (BrokerException e) {
             log.error("build WeEventClient failed, brokerUrl:[{}], exception:{}", brokerUrl, e);
             System.out.println("build WeEventClient failed, brokerUrl:[" + brokerUrl + "], exception:" + e);
