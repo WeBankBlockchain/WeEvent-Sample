@@ -86,12 +86,17 @@ public class JavaSDKSample {
                     getEvent(eventId);
                     break;
                 case "sendFile":
+                	log.info("args。length=" + args.length);
+                	for (int i = 0; i < args.length; i++) {
+						System.out.println("args"+i+"="+args[i]);
+					}
                 	log.info("args[0]=" + args[0]);
                 	log.info("args[1]=" + args[1]);
                 	log.info("args[2]=" + args[2]);
                 	log.info("args[3]=" + args[3]);
                 	topicName = args[2];
                 	fileUrl = args[3];
+                	System.out.println("fileUrl:" + fileUrl);
                 	sendFile(topicName, fileUrl);
                     break;
                 case "receiveFile":
