@@ -198,8 +198,20 @@ public class JavaSDKSample {
     }
     
     private static void receiveFile(String topicName) throws BrokerException {
-    	List<FileChunksMeta> fileChunksMetas = weEventFileClient.listFiles(topicName);
-    	log.info("receiveFile success, fileChunksMetas:{}", JsonHelper.object2Json(fileChunksMetas));
-        System.out.println("receiveFile success, fileChunksMetas:" + JsonHelper.object2Json(fileChunksMetas));
+    	IWeEventFileClient.FileListener fileListener = new IWeEventFileClient.FileListener() {
+            @Override
+            public void onFile(String topicName, String fileName) {
+                log.info("+++++++topic name: {}, file name: {}", topicName, fileName);
+                System.out.println(new File(localReceivePath + "/" + fileName).getPath());
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                e.printStackTrace();
+            }
+        };
+        weEventFileClient.openTransport4Receiver(topicName, fileListener);
+        log.info("receiveFile success,local receive path:{}", localReceivePath + "/download" + topicName);
+        System.out.println("receiveFile success,local receive path:{}" + localReceivePath + "/download" + topicName);
     }
 }
