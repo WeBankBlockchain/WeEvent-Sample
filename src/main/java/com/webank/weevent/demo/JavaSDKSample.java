@@ -17,7 +17,6 @@ import com.webank.weevent.client.WeEvent;
 import com.webank.weevent.core.config.FiscoConfig;
 import com.webank.weevent.file.IWeEventFileClient;
 import com.webank.weevent.file.service.FileChunksMeta;
-import com.webank.weevent.file.service.WeEventFileClient;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,8 +29,6 @@ public class JavaSDKSample {
     private static String localReceivePath = "./logs";
     // chunk size 1MB
     private static int fileChunkSize = 1048576;
-    
-    private static FiscoConfig fiscoConfig;
     
     public static void main(String[] args) throws InterruptedException {
         log.info("args = {}", Arrays.toString(args));
@@ -53,9 +50,12 @@ public class JavaSDKSample {
             // build Client by default groupId and configured brokerUrl
             weEventClient = IWeEventClient.builder().brokerUrl(brokerUrl).groupId(groupId).build();
             
+            FiscoConfig fiscoConfig = new FiscoConfig();
+            fiscoConfig.load("");
+            
             log.info("groupId = " + groupId);
             log.info("fiscoConfig = " + fiscoConfig);
-            weEventFileClient = new WeEventFileClient(groupId, localReceivePath, fileChunkSize, fiscoConfig);
+            weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
         } catch (BrokerException e) {
             log.error("build WeEventClient failed, brokerUrl:[{}], exception:{}", brokerUrl, e);
             System.out.println("build WeEventClient failed, brokerUrl:[" + brokerUrl + "], exception:" + e);
