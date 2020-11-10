@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Before;
+import org.springframework.context.annotation.Bean;
+
 import com.webank.weevent.client.BrokerException;
 import com.webank.weevent.client.IWeEventClient;
 import com.webank.weevent.client.JsonHelper;
@@ -30,6 +33,16 @@ public class JavaSDKSample {
     // chunk size 1MB
     private static int fileChunkSize = 1048576;
     
+    private static FiscoConfig fiscoConfig;
+    
+    @Bean
+    public void bean() {
+    	JavaSDKSample.fiscoConfig = new FiscoConfig();
+    	JavaSDKSample.fiscoConfig.load("");
+    }
+    
+    
+    
     public static void main(String[] args) throws InterruptedException {
         log.info("args = {}", Arrays.toString(args));
 
@@ -49,9 +62,6 @@ public class JavaSDKSample {
         try {
             // build Client by default groupId and configured brokerUrl
             weEventClient = IWeEventClient.builder().brokerUrl(brokerUrl).groupId(groupId).build();
-            
-            FiscoConfig fiscoConfig = new FiscoConfig();
-            fiscoConfig.load("");
             
             log.info("groupId = " + groupId);
             log.info("fiscoConfig = " + fiscoConfig);
