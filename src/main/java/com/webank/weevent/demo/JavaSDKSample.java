@@ -89,6 +89,7 @@ public class JavaSDKSample {
                 	log.info("args[0]=" + args[0]);
                 	log.info("args[1]=" + args[1]);
                 	log.info("args[2]=" + args[2]);
+                	log.info("args[3]=" + args[3]);
                 	topicName = args[2];
                 	fileUrl = args[3];
                 	sendFile(topicName, fileUrl);
