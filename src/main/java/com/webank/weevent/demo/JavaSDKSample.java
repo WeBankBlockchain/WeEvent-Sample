@@ -36,12 +36,6 @@ public class JavaSDKSample {
     
     private static FiscoConfig fiscoConfig;
     
-    @Autowired
-    public void setFiscoConfig(FiscoConfig fiscoConfig) {
-    	log.info("fiscoConfig = " + fiscoConfig);
-        JavaSDKSample.fiscoConfig = fiscoConfig;
-    }
-
     public static void main(String[] args) throws InterruptedException {
         log.info("args = {}", Arrays.toString(args));
 
