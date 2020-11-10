@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.webank.weevent.client.BrokerException;
 import com.webank.weevent.client.IWeEventClient;
@@ -32,12 +33,13 @@ public class JavaSDKSample {
     private static String localReceivePath = "./logs";
     // chunk size 1MB
     private static int fileChunkSize = 1048576;
+    
     private static FiscoConfig fiscoConfig;
     
-    @Before
-    public void before() {
-        fiscoConfig = new FiscoConfig();
-        fiscoConfig.load("");
+    @Autowired
+    public void setFiscoConfig(FiscoConfig fiscoConfig) {
+    	log.info("fiscoConfig = " + fiscoConfig);
+        JavaSDKSample.fiscoConfig = fiscoConfig;
     }
 
     public static void main(String[] args) throws InterruptedException {
