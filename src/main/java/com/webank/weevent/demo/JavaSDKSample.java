@@ -50,17 +50,11 @@ public class JavaSDKSample {
             // build Client by default groupId and configured brokerUrl
             weEventClient = IWeEventClient.builder().brokerUrl(brokerUrl).groupId(groupId).build();
             
-            FiscoConfig fiscoConfig = new FiscoConfig();
-            fiscoConfig.load("classpath:fisco.properties");
-            
-            
-            log.info("fiscoConfig = " + fiscoConfig);
-            
             FiscoConfig fiscoConfig2 = new FiscoConfig();
             fiscoConfig2.load("");
             log.info("fiscoConfig2 = " + fiscoConfig2);
             
-            weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
+            weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig2);
             log.info("weEventFileClient = " + weEventFileClient);
         } catch (BrokerException e) {
             log.error("build WeEventClient failed, brokerUrl:[{}], exception:{}", brokerUrl, e);
