@@ -86,6 +86,7 @@ public class JavaSDKSample {
                     getEvent(eventId);
                     break;
                 case "sendFile":
+                	log.info("args.length=" + args.length);
                 	topicName = args[2];
                 	fileUrl = args[3];
                 	sendFile(topicName, fileUrl);
