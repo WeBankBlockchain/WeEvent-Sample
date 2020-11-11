@@ -26,7 +26,7 @@ public class JavaSDKSample {
     private static IWeEventClient weEventClient;
     private static List<String> subscribeIdList = new ArrayList<>();
 
-    private static String localReceivePath = "./logs";
+    private static String localReceivePath = "/file/path";
     // chunk size 1MB
     private static int fileChunkSize = 1048576;
 
@@ -188,10 +188,10 @@ public class JavaSDKSample {
         System.out.println("getEvent success, event:" + event);
     }
 
-    private static void sendFile(String topicName, String fileUrl) throws BrokerException {
+    private static void sendFile(String topicName, String filePath) throws BrokerException {
         try {
             weEventFileClient.openTransport4Sender(topicName);
-            FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(fileUrl).getAbsolutePath(), true);
+            FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(filePath).getAbsolutePath(), true);
             log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
             System.out.println("sendFile success, fileChunksMeta:" + JsonHelper.object2Json(fileChunksMeta));
         } catch (Exception e) {
