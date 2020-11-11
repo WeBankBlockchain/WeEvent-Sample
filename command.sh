@@ -10,7 +10,7 @@ if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ 
     echo "    ./command.sh publish groupId topicName content"
     echo "    ./command.sh getEvent groupId eventId(成功publish一个事件后，会返回该事件的eventId)"
     echo "    ./command.sh status groupId topicName"
-    echo "    ./command.sh sendFile groupId topicName fileUrl"
+    echo "    ./command.sh sendFile groupId topicName filePath"
     echo "    ./command.sh receiveFile groupId topicName"
     echo "    ./command.sh general groupId"
     exit 1
@@ -70,7 +70,7 @@ fi
 
 if [[ $1 == "sendFile" ]] && [[ $# -ne 4 ]];then
     echo "Usage:"
-    echo "    ./command.sh sendFile groupId topicName fileUrl"
+    echo "    ./command.sh sendFile groupId topicName filePath"
     exit 1
 fi
 
