@@ -190,7 +190,7 @@ public class JavaSDKSample {
     
     private static void sendFile(String topicName, String fileUrl) throws BrokerException {
     	try {
-    		log.info("new File(fileUrl).getAbsolutePath()"+new File(fileUrl).getAbsolutePath());
+    		log.info("new File(fileUrl).getAbsolutePath()" + new File(fileUrl).getAbsolutePath());
     		weEventFileClient.openTransport4Sender(topicName);
         	FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(fileUrl).getAbsolutePath(), true);
         	log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
@@ -214,8 +214,11 @@ public class JavaSDKSample {
                 e.printStackTrace();
             }
         };
-        weEventFileClient.openTransport4Receiver(topicName, fileListener);
-        log.info("receiveFile success,local receive path:{}", localReceivePath + "/download/" + topicName);
-        System.out.println("receiveFile success,local receive path:{}" + localReceivePath + "/download/" + topicName);
+        try {
+        	weEventFileClient.openTransport4Receiver(topicName, fileListener);
+            Thread.sleep(1000 * 60 * 5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
