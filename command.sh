@@ -2,7 +2,7 @@
 current_path=$(pwd)
 
 # check param
-if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup" ]];then
+if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup" ]] && [[ $1 != "sendFile" ]] && [[ $1 != "receiveFile" ]];then
     echo "Usage:"
     echo "    ./command.sh listGroup"
     echo "    ./command.sh open groupId topicName"
@@ -10,6 +10,8 @@ if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ 
     echo "    ./command.sh publish groupId topicName content"
     echo "    ./command.sh getEvent groupId eventId(成功publish一个事件后，会返回该事件的eventId)"
     echo "    ./command.sh status groupId topicName"
+    echo "    ./command.sh sendFile groupId topicName filePath"
+    echo "    ./command.sh receiveFile groupId topicName"
     echo "    ./command.sh general groupId"
     exit 1
 fi
@@ -66,16 +68,28 @@ if [[ $1 == "getEvent" ]] && [[ $# -ne 3 ]];then
     exit 1
 fi
 
+if [[ $1 == "sendFile" ]] && [[ $# -ne 4 ]];then
+    echo "Usage:"
+    echo "    ./command.sh sendFile groupId topicName filePath"
+    exit 1
+fi
+
+if [[ $1 == "receiveFile" ]] && [[ $# -ne 3 ]];then
+    echo "Usage:"
+    echo "    ./command.sh receiveFile groupId topicName"
+    exit 1
+fi
+
 # Mac OS X || GNU/Linux
 if [[ "$(uname)" == "Darwin" ]] || [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]];then
-    if [[ $1 == "publish" ]];then
+    if [[ $1 == "publish" ]] || [[ $1 == "sendFile" ]];then
         ${JAVA_HOME}/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
         ${JAVA_HOME}/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3
     fi
 # Windows
 elif [[ "$(expr substr $(uname -s) 1 6)" == "MINGW" ]];then
-    if [[ $1 == "publish" ]];then
+    if [[ $1 == "publish" ]] || [[ $1 == "sendFile" ]];then
         ${JAVA_HOME}/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
         ${JAVA_HOME}/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3
