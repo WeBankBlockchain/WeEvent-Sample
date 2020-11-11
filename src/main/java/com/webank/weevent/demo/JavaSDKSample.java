@@ -41,7 +41,7 @@ public class JavaSDKSample {
         String groupId = args[1];
         String topicName;
         String content;
-        String fileUrl;
+        String filePath;
         String eventId;
 
         String brokerUrl = PropertiesUtils.getProperty("broker.url");
@@ -86,9 +86,9 @@ public class JavaSDKSample {
                     break;
                 case "sendFile":
                     topicName = args[2];
-                    fileUrl = args[3];
-                    System.out.println("fileUrl:" + fileUrl);
-                    sendFile(topicName, fileUrl);
+                    filePath = args[3];
+                    System.out.println("filePath:" + filePath);
+                    sendFile(topicName, filePath);
                     break;
                 case "receiveFile":
                     topicName = args[2];
