@@ -192,6 +192,7 @@ public class JavaSDKSample {
     	try {
     		log.info("new File(fileUrl).getAbsolutePath()"+new File(fileUrl).getAbsolutePath());
     		weEventFileClient.openTransport4Sender(topicName);
+    		receiveFile(topicName);
         	FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(fileUrl).getAbsolutePath(), true);
         	log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
             System.out.println("sendFile success, fileChunksMeta:" + JsonHelper.object2Json(fileChunksMeta));
@@ -215,7 +216,7 @@ public class JavaSDKSample {
             }
         };
         weEventFileClient.openTransport4Receiver(topicName, fileListener);
-        log.info("receiveFile success,local receive path:{}", localReceivePath + "/download" + topicName);
-        System.out.println("receiveFile success,local receive path:{}" + localReceivePath + "/download" + topicName);
+        log.info("receiveFile success,local receive path:{}", localReceivePath + "/download/" + topicName);
+        System.out.println("receiveFile success,local receive path:{}" + localReceivePath + "/download/" + topicName);
     }
 }
