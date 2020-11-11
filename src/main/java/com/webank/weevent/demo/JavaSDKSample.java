@@ -53,7 +53,7 @@ public class JavaSDKSample {
             FiscoConfig fiscoConfig = new FiscoConfig();
             fiscoConfig.load("");
 
-            weEventFileClient = IWeEventFileClient.build(groupId, "./logs", fileChunkSize, fiscoConfig);
+            weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
         } catch (BrokerException e) {
             log.error("build WeEventClient failed, brokerUrl:[{}], exception:{}", brokerUrl, e);
             System.out.println("build WeEventClient failed, brokerUrl:[" + brokerUrl + "], exception:" + e);
