@@ -1,5 +1,6 @@
 package com.webank.weevent.demo;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,13 +14,21 @@ import com.webank.weevent.client.JsonHelper;
 import com.webank.weevent.client.SendResult;
 import com.webank.weevent.client.TopicInfo;
 import com.webank.weevent.client.WeEvent;
+import com.webank.weevent.core.config.FiscoConfig;
+import com.webank.weevent.file.IWeEventFileClient;
+import com.webank.weevent.file.service.FileChunksMeta;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class JavaSDKSample {
+    private static IWeEventFileClient weEventFileClient;
     private static IWeEventClient weEventClient;
     private static List<String> subscribeIdList = new ArrayList<>();
+
+    private static String localReceivePath = "./received";
+    // chunk size 1MB
+    private static int fileChunkSize = 1048576;
 
     public static void main(String[] args) throws InterruptedException {
         log.info("args = {}", Arrays.toString(args));
@@ -32,6 +41,7 @@ public class JavaSDKSample {
         String groupId = args[1];
         String topicName;
         String content;
+        String filePath;
         String eventId;
 
         String brokerUrl = PropertiesUtils.getProperty("broker.url");
@@ -39,6 +49,11 @@ public class JavaSDKSample {
         try {
             // build Client by default groupId and configured brokerUrl
             weEventClient = IWeEventClient.builder().brokerUrl(brokerUrl).groupId(groupId).build();
+
+            FiscoConfig fiscoConfig = new FiscoConfig();
+            fiscoConfig.load("");
+
+            weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
         } catch (BrokerException e) {
             log.error("build WeEventClient failed, brokerUrl:[{}], exception:{}", brokerUrl, e);
             System.out.println("build WeEventClient failed, brokerUrl:[" + brokerUrl + "], exception:" + e);
@@ -68,6 +83,16 @@ public class JavaSDKSample {
                 case "getEvent":
                     eventId = args[2];
                     getEvent(eventId);
+                    break;
+                case "sendFile":
+                    topicName = args[2];
+                    filePath = args[3];
+                    System.out.println("filePath:" + filePath);
+                    sendFile(topicName, filePath);
+                    break;
+                case "receiveFile":
+                    topicName = args[2];
+                    receiveFile(topicName);
                     break;
             }
         } catch (BrokerException e) {
@@ -161,5 +186,38 @@ public class JavaSDKSample {
         WeEvent event = weEventClient.getEvent(eventId);
         log.info("getEvent success, event:{}", event);
         System.out.println("getEvent success, event:" + event);
+    }
+
+    private static void sendFile(String topicName, String filePath) throws BrokerException {
+        try {
+            weEventFileClient.openTransport4Sender(topicName);
+            FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(filePath).getAbsolutePath(), true);
+            log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
+            System.out.println("sendFile success, fileChunksMeta:" + JsonHelper.object2Json(fileChunksMeta));
+        } catch (Exception e) {
+            log.error("e" + e.getMessage(), e);
+            e.printStackTrace();
+        }
+    }
+
+    private static void receiveFile(String topicName) throws BrokerException {
+        IWeEventFileClient.FileListener fileListener = new IWeEventFileClient.FileListener() {
+            @Override
+            public void onFile(String topicName, String fileName) {
+                log.info("+++++++topic name: {}, file name: {}", topicName, fileName);
+                System.out.println(new File(localReceivePath + "/" + fileName).getPath());
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                e.printStackTrace();
+            }
+        };
+        try {
+            weEventFileClient.openTransport4Receiver(topicName, fileListener);
+            Thread.sleep(1000 * 60 * 5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
