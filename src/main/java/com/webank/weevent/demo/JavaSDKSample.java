@@ -26,7 +26,7 @@ public class JavaSDKSample {
     private static IWeEventClient weEventClient;
     private static List<String> subscribeIdList = new ArrayList<>();
 
-    private static String localReceivePath = "./logs";
+    private static String localReceivePath = "./received";
     // chunk size 1MB
     private static int fileChunkSize = 1048576;
 
