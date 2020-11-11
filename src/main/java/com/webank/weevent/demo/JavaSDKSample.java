@@ -192,7 +192,6 @@ public class JavaSDKSample {
     	try {
     		log.info("new File(fileUrl).getAbsolutePath()"+new File(fileUrl).getAbsolutePath());
     		weEventFileClient.openTransport4Sender(topicName);
-    		receiveFile(topicName);
         	FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(fileUrl).getAbsolutePath(), true);
         	log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
             System.out.println("sendFile success, fileChunksMeta:" + JsonHelper.object2Json(fileChunksMeta));
