@@ -181,17 +181,10 @@ public class JavaSDKSample {
         log.info("getEvent success, event:{}", event);
         System.out.println("getEvent success, event:" + event);
     }
-    
-    private static IWeEventFileClient getIWeEventFileClient(String groupId) {
-		FiscoConfig fiscoConfig = new FiscoConfig();
-		fiscoConfig.load("");
-		IWeEventFileClient weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
-		return weEventFileClient;
-	}
 
     private static void sendFile(String groupId, String topicName, String filePath) throws BrokerException {
         try {
-        	IWeEventFileClient weEventFileClient = getIWeEventFileClient(groupId);
+            IWeEventFileClient weEventFileClient = getIWeEventFileClient(groupId);
             weEventFileClient.openTransport4Sender(topicName);
             FileChunksMeta fileChunksMeta = weEventFileClient.publishFile(topicName, new File(filePath).getAbsolutePath(), true);
             log.info("sendFile success, fileChunksMeta:{}", JsonHelper.object2Json(fileChunksMeta));
@@ -216,12 +209,19 @@ public class JavaSDKSample {
             }
         };
         try {
-        	IWeEventFileClient weEventFileClient = getIWeEventFileClient(groupId);
+            IWeEventFileClient weEventFileClient = getIWeEventFileClient(groupId);
             weEventFileClient.openTransport4Receiver(topicName, fileListener);
             Thread.sleep(1000 * 60 * 5);
         } catch (Exception e) {
-        	log.error("receive file failed.", e);
+            log.error("receive file failed.", e);
             System.out.println("receive file failed." + e);
         }
+    }
+
+    private static IWeEventFileClient getIWeEventFileClient(String groupId) {
+        FiscoConfig fiscoConfig = new FiscoConfig();
+        fiscoConfig.load("");
+        IWeEventFileClient weEventFileClient = IWeEventFileClient.build(groupId, localReceivePath, fileChunkSize, fiscoConfig);
+        return weEventFileClient;
     }
 }
