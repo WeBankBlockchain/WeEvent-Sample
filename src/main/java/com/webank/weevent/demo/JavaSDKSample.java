@@ -26,7 +26,6 @@ public class JavaSDKSample {
     private static List<String> subscribeIdList = new ArrayList<>();
 
     private static String localReceivePath = "./received";
-    private static String JSON = "json";
     // chunk size 1MB
     private static int fileChunkSize = 1048576;
 
@@ -43,7 +42,6 @@ public class JavaSDKSample {
         String content;
         String filePath;
         String eventId;
-        String type;
 
         String brokerUrl = PropertiesUtils.getProperty("broker.url");
 
@@ -64,15 +62,19 @@ public class JavaSDKSample {
                     break;
                 case "subscribe":
                     topicName = args[2];
-                    type = args[3];
-                    subscribe(topicName, type);
+                    subscribe(topicName);
                     break;
                 case "publish":
                     topicName = args[2];
                     content = args[3];
-                    type = args[4];
                     System.out.println("content:" + content);
-                    publish(topicName, content, type);
+                    publish(topicName, content);
+                    break;
+                case "publishJson":
+                    topicName = args[2];
+                    content = args[3];
+                    System.out.println("content:" + content);
+                    publishJson(topicName, content);
                     break;
                 case "status":
                     topicName = args[2];
@@ -124,11 +126,9 @@ public class JavaSDKSample {
         }
     }
 
-    private static void subscribe(String topicName, String type) throws BrokerException {
+    private static void subscribe(String topicName) throws BrokerException {
         Map<String, String> ext = new HashMap<>();
-        if(JSON.equals(type)) {
-        	ext.put(WeEvent.WeEvent_FORMAT, JSON);
-        }
+
         String subscribeId = weEventClient.subscribe(topicName, WeEvent.OFFSET_LAST, ext, new IWeEventClient.EventListener() {
             @Override
             public void onEvent(WeEvent event) {
@@ -147,15 +147,8 @@ public class JavaSDKSample {
         subscribeIdList.add(subscribeId);
     }
 
-    private static void publish(String topicName, String content, String type) throws BrokerException {
-    	WeEvent event = null;
-        if(JSON.equals(type)) {
-        	Map<String, String> extensions = new HashMap<>();
-            extensions.put(WeEvent.WeEvent_FORMAT, JSON);
-            event = new WeEvent(topicName, content.getBytes(StandardCharsets.UTF_8), extensions);
-        } else {
-        	event = new WeEvent(topicName, content.getBytes(StandardCharsets.UTF_8));
-        }
+    private static void publish(String topicName, String content) throws BrokerException {
+        WeEvent event = new WeEvent(topicName, content.getBytes(StandardCharsets.UTF_8));
         SendResult sendResult = weEventClient.publish(event);
         if (!sendResult.getStatus().equals(SendResult.SendResultStatus.SUCCESS)) {
             log.error("publish event by topic:[{}] failed, sendResult:{}.", topicName, sendResult);
@@ -163,6 +156,20 @@ public class JavaSDKSample {
         } else {
             log.info("publish event to:{} success, sendResult:{}.", topicName, sendResult);
             System.out.println("publish event by topic:[" + topicName + "] success, sendResult:" + sendResult);
+        }
+    }
+    
+    private static void publishJson(String topicName, String content) throws BrokerException {
+    	Map<String, String> ext = new HashMap<>();
+    	ext.put(WeEvent.WeEvent_FORMAT, "json");
+        WeEvent event = new WeEvent(topicName, content.getBytes(StandardCharsets.UTF_8), ext);
+        SendResult sendResult = weEventClient.publish(event);
+        if (!sendResult.getStatus().equals(SendResult.SendResultStatus.SUCCESS)) {
+            log.error("publishJson event by topic:[{}] failed, sendResult:{}.", topicName, sendResult);
+            System.out.println("publishJson event by topic:[" + topicName + "] failed, sendResult:" + sendResult);
+        } else {
+            log.info("publishJson event to:{} success, sendResult:{}.", topicName, sendResult);
+            System.out.println("publishJson event by topic:[" + topicName + "] success, sendResult:" + sendResult);
         }
     }
 
