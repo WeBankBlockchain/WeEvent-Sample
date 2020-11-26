@@ -152,7 +152,7 @@ public class JavaSDKSample {
         if(JSON.equals(type)) {
         	Map<String, String> extensions = new HashMap<>();
             extensions.put(WeEvent.WeEvent_FORMAT, JSON);
-            event = new WeEvent(topicName, "{\"name\":\"mark\",\"age\":6}".getBytes(StandardCharsets.UTF_8), extensions);
+            event = new WeEvent(topicName, content.getBytes(StandardCharsets.UTF_8), extensions);
         } else {
         	event = new WeEvent(topicName, content.getBytes(StandardCharsets.UTF_8));
         }
