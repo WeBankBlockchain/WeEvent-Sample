@@ -6,8 +6,8 @@ if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ 
     echo "Usage:"
     echo "    ./command.sh listGroup"
     echo "    ./command.sh open groupId topicName"
-    echo "    ./command.sh subscribe groupId topicName"
-    echo "    ./command.sh publish groupId topicName content"
+    echo "    ./command.sh subscribe groupId topicName type"
+    echo "    ./command.sh publish groupId topicName content type"
     echo "    ./command.sh getEvent groupId eventId(成功publish一个事件后，会返回该事件的eventId)"
     echo "    ./command.sh status groupId topicName"
     echo "    ./command.sh sendFile groupId topicName filePath"
@@ -44,15 +44,15 @@ if [[ $1 == "open" ]] && [[ $# -ne 3 ]];then
     exit 1
 fi
 
-if [[ $1 == "subscribe" ]] && [[ $# -ne 3 ]];then
+if [[ $1 == "subscribe" ]] && [[ $# -ne 4 ]];then
     echo "Usage:"
-    echo "    ./command.sh subscribe groupId topicName"
+    echo "    ./command.sh subscribe groupId topicName type"
     exit 1
 fi
 
-if [[ $1 == "publish" ]] && [[ $# -ne 4 ]];then
+if [[ $1 == "publish" ]] && [[ $# -ne 5 ]];then
     echo "Usage:"
-    echo "    ./command.sh publish groupId topicName content"
+    echo "    ./command.sh publish groupId topicName content type"
     exit 1
 fi
 
@@ -82,14 +82,18 @@ fi
 
 # Mac OS X || GNU/Linux
 if [[ "$(uname)" == "Darwin" ]] || [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]];then
-    if [[ $1 == "publish" ]] || [[ $1 == "sendFile" ]];then
+	if [[ $1 == "publish" ]];then
+        "${JAVA_HOME}"/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4 $5
+    elif [[ $1 == "subscribe" ]] || [[ $1 == "sendFile" ]];then
         "${JAVA_HOME}"/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
         "${JAVA_HOME}"/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3
     fi
 # Windows
 elif [[ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]];then
-    if [[ $1 == "publish" ]] || [[ $1 == "sendFile" ]];then
+    if [[ $1 == "publish" ]];then
+        "${JAVA_HOME}"/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4 $5
+    elif [[ $1 == "subscribe" ]] || [[ $1 == "sendFile" ]];then
         "${JAVA_HOME}"/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
         "${JAVA_HOME}"/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3
