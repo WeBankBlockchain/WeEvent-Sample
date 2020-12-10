@@ -70,6 +70,12 @@ public class JavaSDKSample {
                     System.out.println("content:" + content);
                     publish(topicName, content);
                     break;
+                case "publishJson":
+                    topicName = args[2];
+                    content = args[3];
+                    System.out.println("content:" + content);
+                    publishJson(topicName, content);
+                    break;
                 case "status":
                     topicName = args[2];
                     status(topicName);
@@ -150,6 +156,20 @@ public class JavaSDKSample {
         } else {
             log.info("publish event to:{} success, sendResult:{}.", topicName, sendResult);
             System.out.println("publish event by topic:[" + topicName + "] success, sendResult:" + sendResult);
+        }
+    }
+    
+    private static void publishJson(String topicName, String content) throws BrokerException {
+    	Map<String, String> ext = new HashMap<>();
+    	ext.put(WeEvent.WeEvent_FORMAT, "json");
+        WeEvent event = new WeEvent(topicName, content.getBytes(StandardCharsets.UTF_8), ext);
+        SendResult sendResult = weEventClient.publish(event);
+        if (!sendResult.getStatus().equals(SendResult.SendResultStatus.SUCCESS)) {
+            log.error("publishJson event by topic:[{}] failed, sendResult:{}.", topicName, sendResult);
+            System.out.println("publishJson event by topic:[" + topicName + "] failed, sendResult:" + sendResult);
+        } else {
+            log.info("publishJson event to:{} success, sendResult:{}.", topicName, sendResult);
+            System.out.println("publishJson event by topic:[" + topicName + "] success, sendResult:" + sendResult);
         }
     }
 

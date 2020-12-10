@@ -2,13 +2,14 @@
 current_path=$(pwd)
 
 # check param
-if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup" ]] && [[ $1 != "sendFile" ]] && [[ $1 != "receiveFile" ]];then
+if [[ $1 != "open" ]] && [[ $1 != "subscribe" ]] && [[ $1 != "publish" ]] && [[ $1 != "publishJson" ]] && [[ $1 != "status" ]] && [[ $1 != "getEvent" ]] && [[ $1 != "general" ]] && [[ $1 != "listGroup" ]] && [[ $1 != "sendFile" ]] && [[ $1 != "receiveFile" ]];then
     echo "Usage:"
     echo "    ./command.sh listGroup"
     echo "    ./command.sh open groupId topicName"
     echo "    ./command.sh subscribe groupId topicName"
     echo "    ./command.sh publish groupId topicName content"
-    echo "    ./command.sh getEvent groupId eventId(成功publish一个事件后，会返回该事件的eventId)"
+    echo "    ./command.sh publishJson groupId topicName content"
+    echo "    ./command.sh getEvent groupId eventId(After an event is successfully published, the eventid of the event is returned)"
     echo "    ./command.sh status groupId topicName"
     echo "    ./command.sh sendFile groupId topicName filePath"
     echo "    ./command.sh receiveFile groupId topicName"
@@ -56,6 +57,12 @@ if [[ $1 == "publish" ]] && [[ $# -ne 4 ]];then
     exit 1
 fi
 
+if [[ $1 == "publishJson" ]] && [[ $# -ne 4 ]];then
+    echo "Usage:"
+    echo "    ./command.sh publishJson groupId topicName content"
+    exit 1
+fi
+
 if [[ $1 == "status" ]] && [[ $# -ne 3 ]];then
     echo "Usage:"
     echo "    ./command.sh status groupId topicName"
@@ -82,14 +89,14 @@ fi
 
 # Mac OS X || GNU/Linux
 if [[ "$(uname)" == "Darwin" ]] || [[ "$(expr substr $(uname -s) 1 5)" == "Linux" ]];then
-    if [[ $1 == "publish" ]] || [[ $1 == "sendFile" ]];then
+    if [[ $1 == "publish" ]] || [[ $1 == "publishJson" ]] || [[ $1 == "sendFile" ]];then
         "${JAVA_HOME}"/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
         "${JAVA_HOME}"/bin/java -cp dist/conf/:dist/lib/*:dist/apps/* com.webank.weevent.demo.JavaSDKSample $1 $2 $3
     fi
 # Windows
 elif [[ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]];then
-    if [[ $1 == "publish" ]] || [[ $1 == "sendFile" ]];then
+    if [[ $1 == "publish" ]] || [[ $1 == "publishJson" ]] || [[ $1 == "sendFile" ]];then
         "${JAVA_HOME}"/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3 $4
     else
         "${JAVA_HOME}"/bin/java -cp 'dist/conf/;dist/lib/*;dist/apps/*' com.webank.weevent.demo.JavaSDKSample $1 $2 $3
