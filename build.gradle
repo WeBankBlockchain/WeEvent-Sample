@@ -45,9 +45,10 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     // weevent-client
-    compile "com.webank.weevent:weevent-client:1.5.0"
+    compile "com.webank.weevent:weevent-client:1.6.0"
     // weevent-file
-    compile "com.webank.weevent:weevent-file:1.5.0"
+    compile "com.webank.weevent:weevent-file:1.6.0"
+    //    compile fileTree(dir: "lib", include: ['*.jar'])
 
 }
 
